@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  film-app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      SPRING_APPLICATION_NAME: FilmApp
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_URL: jdbc:postgresql://filmproba.cps8uueyypv4.eu-central-1.rds.amazonaws.com:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_SQL_INIT_CONTINUE_ON_ERROR: 'true'
+    networks:
+      - film-network
+
+  database:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - film-network
+
+networks:
+  film-network:
